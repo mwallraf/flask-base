@@ -1,0 +1,104 @@
+{% extends 'layouts/base.html' %}
+{% from "inventory/macros.html" import check_item_icon, tools_icon %}
+
+{% block content %}
+    <div class="ui stackable grid container">
+        <div class="sixteen wide tablet twelve wide computer centered column">
+            <a class="ui basic compact button" href="{{ url_for('inventory.index') }}">
+                <i class="caret left icon"></i>
+                Back to inventory dashboard
+            </a>
+            <h2 class="ui header">
+                Devices
+                <div class="sub header">
+                    View and manage current network devices.
+                </div>
+            </h2>
+
+            <div class="ui menu">
+                <div id="select-role" class="ui dropdown item">
+                    <div class="text">
+                        Select device type
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-value="all_no_ap">All managed devices</div>
+                        <div class="item" data-value="all">All devices (incl AP)</div>
+                        {% for r in ["EMEA", "NASA", "APAC"] %}
+                            <div class="item" data-value="{{ r }}">{{ r }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="ui right search item">
+                    <div class="ui transparent icon input">
+                        <input id="search-users" type="text" placeholder="Search inventory...">
+                        <i class="search icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            {# Use overflow-x: scroll so that mobile views don't freak out
+             # when the table is too wide #}
+            <div style="overflow-x: scroll;">
+                <table class="ui searchable sortable unstackable selectable celled table">
+                    <thead>
+                        <tr>
+                            <th class="sorted ascending">Hostname</th>
+                            <th>Management IP</th>
+                            <th>Site ID</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for u in devices | sort(attribute='hostname') %}
+                        {% set ise_status = u.ise.present if (u.ise is defined and u.ise.present is defined) else False %}
+                        <tr>
+                            <td class="device type" onclick="window.location.href='{{ url_for('inventory.device_info', device_id=u.hostname|string) }}';">{{ u.hostname }}</td>
+                            <td>{{ u.management_ip }}</td>
+                            <td onclick="window.location.href = '{{ url_for('inventory.site_info', site_id=u.siteid|string) }}';">{{ u.siteid }}</td>
+                            <td>{{ check_item_icon('ise', ise_status,
+                                    'icon key', description='ISE status') }}
+                                {{ tools_icon('tools', url_for('inventory.device_tools', device_id=u.hostname|string),
+                                    'icon cog', description='Device Tools') }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#search-users').keyup(function () {
+                var searchText = $(this).val();
+                if (searchText.length > 0) {
+                    $('tbody td:icontains(' + searchText + ')').addClass('positive');
+                    $('td.positive').not(':icontains(' + searchText + ')').removeClass('positive');
+                    $('tbody td').not(':icontains(' + searchText + ')').closest('tr').addClass('hidden').hide();
+                    $('tr.hidden:icontains(' + searchText + ')').removeClass('hidden').show();
+                } else {
+                    $('td.positive').removeClass('positive');
+                    $('tr.hidden').removeClass('hidden').show();
+                }
+            });
+
+            $('#select-role').dropdown({
+                onChange: function (value, text, $selectedItem) {
+                    if (value === "all") {
+                        value = "";
+                    }
+                    else if (value === "all_no_ap") {
+                        value = "ap";
+                        $('td.device.type:contains(' + value + ')').closest('tr').addClass('hidden').hide();
+                        $('td.device.type').not(':contains(' + value + ')').closest('tr').removeClass('hidden').show();
+                        return;
+                    }
+                    $('td.device.type:contains(' + value + ')').closest('tr').removeClass('hidden').show();
+                    $('td.device.type').not(':contains(' + value + ')').closest('tr').addClass('hidden').hide();
+                }
+            });
+        });
+    </script>
+{% endblock %}

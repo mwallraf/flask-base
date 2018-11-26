@@ -1,0 +1,97 @@
+{% extends 'layouts/base.html' %}
+{% from "inventory/macros.html" import check_item_icon %}
+
+{% block content %}
+    <div class="ui stackable grid container">
+        <div class="sixteen wide tablet twelve wide computer centered column">
+            <a class="ui basic compact button" href="{{ url_for('inventory.index') }}">
+                <i class="caret left icon"></i>
+                Back to inventory dashboard
+            </a>
+            <h2 class="ui header">
+                Sites
+                <div class="sub header">
+                    View and manage current network sites.
+                </div>
+            </h2>
+
+            <div class="ui menu">
+                <div id="select-region" class="ui dropdown item">
+                    <div class="text">
+                        Select region
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-value="">All regions</div>
+                        {% for r in ["EMEA", "NASA", "APAC"] %}
+                            <div class="item" data-value="{{ r }}">{{ r }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="ui right search item">
+                    <div class="ui transparent icon input">
+                        <input id="search-sites" type="text" placeholder="Search inventory...">
+                        <i class="search icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            {# Use overflow-x: scroll so that mobile views don't freak out
+             # when the table is too wide #}
+            <div style="overflow-x: scroll;">
+                <table class="ui searchable sortable unstackable selectable celled table">
+                    <thead>
+                        <tr>
+                            <th class="sorted ascending">Site ID</th>
+                            <th>City</th>
+                            <th>Country</th>
+                            <th>Region</th>
+                            <th>WAN Owner</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for u in sites | sort(attribute='siteid') %}
+                        {% set ise_status = u.ise.present if (u.ise is defined and u.ise.present is defined) else False %}
+                        <tr>
+
+                            <td onclick="window.location.href = '{{ url_for('inventory.site_info', site_id=u.siteid|string) }}';">{{ u.siteid }}</td>
+                            <td>{{ u.city }}</td>
+                            <td>{{ u.country }}</td>
+                            <td class="site region">{{ u.region }}</td>
+                            <td>{{ u.wan_owner }}</td>
+                            <td>{{ check_item_icon('ise', ise_status,
+                                    'icon key', description='ISE status') }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#search-sites').keyup(function () {
+                var searchText = $(this).val();
+                if (searchText.length > 0) {
+                    $('tbody td:icontains(' + searchText + ')').addClass('positive');
+                    $('td.positive').not(':icontains(' + searchText + ')').removeClass('positive');
+                    $('tbody td').not(':icontains(' + searchText + ')').closest('tr').addClass('hidden').hide();
+                    $('tr.hidden:icontains(' + searchText + ')').removeClass('hidden').show();
+                } else {
+                    $('td.positive').removeClass('positive');
+                    $('tr.hidden').removeClass('hidden').show();
+                }
+            });
+
+            $('#select-region').dropdown({
+                onChange: function (value, text, $selectedItem) {
+                    $('td.site.region:contains(' + value + ')').closest('tr').removeClass('hidden').show();
+                    $('td.site.region').not(':contains(' + value + ')').closest('tr').addClass('hidden').hide();
+                }
+            });
+        });
+    </script>
+{% endblock %}

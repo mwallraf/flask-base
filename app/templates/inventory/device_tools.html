@@ -1,0 +1,124 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% set endpoints = [
+        ('inventory.device_tools', 'Network tools'),
+        ('inventory.device_tools_ping', 'Ping'),
+        ('inventory.device_tools_snmp', 'SNMP'),
+    ] 
+%}
+
+{% macro navigation(items) %}
+    <div class="ui vertical fluid secondary menu">
+        {% for route, name in items %}
+            {% set href = url_for(route, device_id=device.hostname) %}
+            <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
+                {{ name }}
+            </a>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro device_info(device) %}
+    <table class="ui compact definition table">
+        <tr><td>Hostname</td><td>{{ device.hostname }}</td></tr>
+        <tr><td>Management IP</td><td>{{ device.management_ip }}</td></tr>
+        <tr><td>Site ID</td><td>{{ device.siteid }}</td></tr>
+    </table>
+
+{% endmacro %}
+
+{% macro render_job(job) %}
+    <div id="job-status" class="ui message">
+        <span id="job-status-msg"></span>
+    </div>
+
+    <pre id="job-details" class="job-output"></pre>
+{% endmacro %}
+
+{% block content %}
+    <style>
+    .job-output {
+        color: #ffc72c;
+        background-color: #425563;
+    }
+    </style>
+
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <a class="ui basic compact button" href="{{ url_for('inventory.devices') }}">
+                <i class="caret left icon"></i>
+                Back to all devices
+            </a>
+            <h2 class="ui header">
+                {{ device.hostname }}
+                <div class="sub header">External tools for {{ device.hostname }}.</div>
+            </h2>
+        </div>
+        <div class="stretched divided very relaxed row">
+            <div class="four wide column">
+                {{ navigation(endpoints) }}
+            </div>
+            <div class="eight wide column">
+                {% if form %}
+                    {{ f.render_form(form) }}
+                    {% if job %}
+                        {{ render_job(job) }}
+                    {% endif %}
+                {% else %}
+                    {{ device_info(device) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            function getStatus(taskID) {
+              $.ajax({
+                url: `/inventory/tasks/${taskID}`,
+                method: 'GET'
+              })
+              .done((res) => {
+                const html = `
+                  <tr>
+                    <td>${res.data.task_id}</td>
+                    <td>${res.data.task_status}</td>
+                    <td>${res.data.task_result}</td>
+                  </tr>`
+                const taskStatus = res.data.task_status;
+                if (taskStatus === 'finished') {
+                    $('#job-status-msg').html("The task has finished.");
+                    $('#job-status').removeClass("error info warning").addClass("success");
+                }
+                else if (taskStatus === 'failed') {
+                    $('#job-status-msg').html("Oops .. something went wrong ...");
+                    $('#job-status').removeClass("info warning success").addClass("error");
+                }
+                else {
+                    $('#job-status-msg').html("Task status = '" + taskStatus + "'. Wait until the task is finished to see the result.");
+                    $('#job-status').removeClass("warning error success").addClass("info");
+                }
+                if (taskStatus === 'finished' || taskStatus === 'failed') {
+                    $('#job-details').html(res.data.task_result);
+                    return false;
+                }
+                setTimeout(function() {
+                  getStatus(res.data.task_id);
+                }, 1000);
+              })
+              .fail((err) => {
+                console.log(err);
+              });
+            }
+
+            {% if job %}
+                // start checking the task status
+                getStatus("{{ job.data.task_id }}");
+            {% endif %}
+
+        });
+
+    </script>
+{% endblock %}

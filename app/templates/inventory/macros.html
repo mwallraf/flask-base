@@ -1,0 +1,11 @@
+{% macro check_item_icon(check_item, state, icon, description=None) %}
+        <button class="mini circular ui icon button {% if not state %} disabled{% endif %}">
+          <i class="{{ icon }}{% if state %} green{% else %} red{% endif %}"></i>
+        </button>
+{% endmacro %}
+
+{% macro tools_icon(check_item, link, icon, description=None) %}
+        <button class="mini circular ui icon button" onclick="window.location.href = '{{ link }}'">
+          <i class="{{ icon }}"></i>
+        </button>
+{% endmacro %}

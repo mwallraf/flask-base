@@ -72,4 +72,10 @@ def create_app(config_name):
     from .admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
+    from .inventory import inventory as inventory_blueprint
+    app.register_blueprint(inventory_blueprint, url_prefix='/inventory')
+
+    from .provisioning import provisioning as provisioning_blueprint
+    app.register_blueprint(provisioning_blueprint, url_prefix='/provisioning')
+
     return app

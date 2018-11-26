@@ -29,8 +29,13 @@
       #}
 
         {% block nav %}
-          {# add dropdown variable here to the render_nav method to render dropdowns #}
-          {{ nav.render_nav(current_user) }}
+          {% set dropdown = 
+            [
+              ('inventory.index', 'Inventory', ''),
+              ('provisioning.index', 'Provisioning', '')
+            ]
+          %}
+          {{ nav.render_nav(current_user, dropdown) }}
         {% endblock %}
 
         {% include 'partials/_flashes.html' %}

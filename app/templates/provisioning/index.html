@@ -1,0 +1,41 @@
+{% extends 'layouts/base.html' %}
+
+{% macro dashboard_option(title, endpoint, description=None, icon=None, admin=None) %}
+    {% if (not admin) or (admin and current_user.is_admin()) %}
+        <a class="column" href="{{ url_for(endpoint) }}">
+            <div class="ui padded segment">
+                <h3 class="ui header">
+                    {% if icon is not none %}
+                        <i class="{{ icon }}"></i>
+                    {% endif %}
+                    <div class="content">
+                        {{ title }}
+                        {% if description is not none %}
+                            <div class="sub header">
+                                {{ description }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </h3>
+            </div>
+        </a>
+    {% endif %}
+{% endmacro %}
+
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <h2 class="ui header">
+                Provisioning Dashboard
+            </h2>
+            <div class="ui two column stackable grid">
+                {{ dashboard_option('Templates', 'provisioning.templates',
+                                    description='Manage provisioning templates', icon='users icon') }}
+                {{ dashboard_option('Keywords', 'provisioning.keywords',
+                                    description='Manage keywords used inside templates', icon='building icon') }}
+                {{ dashboard_option('Add Template', 'provisioning.new_temlate',
+                                    description='Create a new template', icon='users icon') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

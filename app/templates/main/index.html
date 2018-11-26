@@ -1,17 +1,47 @@
 {% extends 'layouts/base.html' %}
 
-{% block content %}
-    <div class="ui text container">
-      <h1>Hello {% if not (current_user.is_authenticated) %} world {% else %} {{ current_user.full_name() }} {% endif %},</h1>
-
-        <p>This is <a href="http://hack4impact.org">Hack4Impact</a>'s web application template. We'll use this as a
-        foundation for each of our <a href="http://flask.pocoo.org">Flask</a> projects. The goal is to reduce the work
-        necessary to get a new project off the ground, by providing boilerplate code (such as account management
-        facilities), as well as uncontroversial and extensible defaults. We have integrated an
-        <a href="http://sass-lang.com">SCSS</a>-based asset pipeline based around a (fantastic!) framework
-        called <a href="http://semantic-ui.com">Semantic UI</a>. Much of this code is appropriated from the examples
-        in Miguel Grinberg's book, <a href="http://flaskbook.com"><em>Flask Web Development</em></a>.</p>
-
-        <p>{{ lipsum(6) }}</p>
+{% macro dashboard_link(title, short_descr, image) %}
+  <div class="card">
+    <div class="blurring dimmable image">
+      <div class="ui dimmer">
+        <div class="content">
+          <div class="center">
+            <div class="ui inverted button">Open link</div>
+          </div>
+        </div>
+      </div>
+      <img src="{{ url_for('static', filename=image) }}" height="194">
     </div>
+    <div class="content">
+      <a class="header">{{ title }}</a>
+      <div class="meta">
+        <span class="date">{{ short_descr }}</span>
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <h2 class="ui header">
+                Useful links
+            </h2>
+
+            <div class="ui special four cards mini">
+                {{ dashboard_link("Splunk", "Reports and dashboarding", "images/links/splunk.png") }}
+                {{ dashboard_link("GIT", "GIT code repository", "images/links/git.png") }}
+                {{ dashboard_link("Backups", "Direct link to backups", "images/links/backups.png") }}
+                {{ dashboard_link("Solarwinds", "Monitoring", "images/links/git.png") }}
+                {{ dashboard_link("", "", "images/links/git.png") }}
+            </div>
+
+        </div>
+    </div>
+
+<script>
+$('.special.cards .image').dimmer({
+  on: 'hover'
+});
+</script>
 {% endblock %}
