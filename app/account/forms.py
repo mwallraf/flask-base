@@ -106,6 +106,10 @@ class ChangePasswordForm(Form):
     submit = SubmitField('Update password')
 
 
+class TestEmailForm(Form):
+    submit = SubmitField('Send test mail')
+
+
 class ChangeEmailForm(Form):
     email = EmailField(
         'New email', validators=[InputRequired(),

@@ -23,6 +23,7 @@ from app.account.forms import (
     RegistrationForm,
     RequestResetPasswordForm,
     ResetPasswordForm,
+    TestEmailForm
 )
 from app.email import send_email
 from app.models import User
@@ -271,6 +272,21 @@ def join_from_invite(user_id, token):
             user=new_user,
             invite_link=invite_link)
     return redirect(url_for('main.index'))
+
+
+@account.route('/account/test-mail', methods=['GET', 'POST'])
+@login_required
+def send_test_mail():
+    form = TestEmailForm()
+    if form.validate_on_submit():
+        get_queue().enqueue(
+            send_email,
+            recipient=current_user.email,
+            subject='TEST MAIL',
+            template='account/email/test_mail',
+            user=current_user._get_current_object())
+        flash("A test email has been sent to '{}'".format(current_user.email), 'info')
+    return render_template('account/manage.html', form=form)
 
 
 @account.before_app_request
