@@ -1,4 +1,5 @@
 {% extends 'layouts/base.html' %}
+{% from "inventory/macros.html" import check_item_icon, tools_icon %}
 
 {% block content %}
     <div class="ui stackable grid container">
@@ -40,14 +41,20 @@
                     <thead>
                         <tr>
                             <th class="sorted ascending">Template</th>
+                            <th>Description</th>
+                            <th>Created By</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                     {% for t in templates | sort(attribute='name') %}
                         <tr>
-                            <td onclick="window.location.href='{{ url_for('provisioning.manage_template', template_id=t.id) }}';">{{ t.name }}</td>
-                            <td></td>
+                            <td onclick="window.location.href='{{ url_for('provisioning.provision_template', template_id=t.id) }}';">{{ t.name }}</td>
+                            <td>{{ t.get_option("description") }}</td>
+                            <td>{{ t.created_by.full_name() }}</td>
+                            <td>{{ tools_icon('tools', url_for('provisioning.manage_template', template_id=t.id),
+                                    'icon cog', description='Device Tools') }}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

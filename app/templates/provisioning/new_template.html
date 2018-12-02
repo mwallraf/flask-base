@@ -4,6 +4,7 @@
 {% block scripts %}
 {% endblock %}
 
+
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
@@ -25,16 +26,16 @@
 
             {{ f.begin_form(form, flashes) }}
 
-                <div class="two fields">
-                    {{ f.render_form_field(form.name) }}
-                    {{ f.render_form_field(form.enabled) }}
-                </div>
+                {{ f.render_form_field(form.enabled) }}
+                {{ f.render_form_field(form.name) }}
 
-                {% for option in template_options %}
-                    {{ f.render_form_field(form["option_"+option]) }}
+                {% for option in form.get_options() %}
+                    {{ f.render_form_field(form[option]) }}
                 {% endfor %}
 
-                {{ f.render_form_field(form.template) }}
+                {{ f.draggable_keywords(keywords) }}
+
+                {{ f.render_form_field(form.template, extra_classes="droppable") }}
 
 
                 {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
@@ -49,4 +50,54 @@
             {{ f.end_form() }}
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+
+
+            $.fn.insertAtCaret = function (myValue) {
+              return this.each(function(){
+              //IE support
+              if (document.selection) {
+                this.focus();
+                sel = document.selection.createRange();
+                sel.text = myValue;
+                this.focus();
+              }
+              //MOZILLA / NETSCAPE support
+              else if (this.selectionStart || this.selectionStart == '0') {
+                var startPos = this.selectionStart;
+                var endPos = this.selectionEnd;
+                var scrollTop = this.scrollTop;
+                this.value = this.value.substring(0, startPos)+ myValue+ this.value.substring(endPos,this.value.length);
+                this.focus();
+                this.selectionStart = startPos + myValue.length;
+                this.selectionEnd = startPos + myValue.length;
+                this.scrollTop = scrollTop;
+              } else {
+                this.value += myValue;
+                this.focus();
+              }
+              });
+            };
+
+            $(function() {         
+                $( ".draggable").draggable({
+                    helper: 'clone',
+                    cursor: 'pointer',
+                    start: function (ui){
+                        $(ui.helper).addClass("dragging");
+                    }
+                });
+
+                $( ".droppable" ).droppable({
+                    accept: ".draggable",                        
+                    drop: function(ev, ui) {
+                        $(this).insertAtCaret(" \{\{ " + ui.draggable.text() + " \}\} ");
+                    }
+                });
+
+            });    
+        });
+    </script>
 {% endblock %}

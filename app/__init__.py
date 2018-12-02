@@ -12,6 +12,8 @@ from flask_wtf import CsrfProtect
 from app.assets import app_css, app_js, vendor_css, vendor_js
 from config import config
 
+import logging
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 mail = Mail()
@@ -77,5 +79,8 @@ def create_app(config_name):
 
     from .provisioning import provisioning as provisioning_blueprint
     app.register_blueprint(provisioning_blueprint, url_prefix='/provisioning')
+
+    from .rtd import rtd as provisioning_rtd
+    app.register_blueprint(provisioning_rtd, url_prefix='/rtd')
 
     return app

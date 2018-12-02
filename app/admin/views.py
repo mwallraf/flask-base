@@ -16,6 +16,7 @@ from app.admin.forms import (
     ChangeUserEmailForm,
     InviteUserForm,
     NewUserForm,
+    UpdateUserForm
 )
 from app.decorators import admin_required
 from app.email import send_email
@@ -148,6 +149,32 @@ def change_account_type(user_id):
         flash('Role for user {} successfully changed to {}.'.format(
             user.full_name(), user.role.name), 'form-success')
     return render_template('admin/manage_user.html', user=user, form=form)
+
+
+@admin.route('/user/<int:user_id>/update', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def update_user(user_id):
+    """Change a template's details."""
+    user = User.query.get(user_id)
+    if user is None:
+        abort(404)
+
+    form = UpdateUserForm(obj=user)
+
+    if form.validate_on_submit():
+        user.first_name = form.first_name.data
+        user.last_name = form.last_name.data
+        user.confirmed = request.form.get("confirmed", False)
+        db.session.add(user)
+        db.session.commit()
+        flash('User {} successfully updated.'.format(user.full_name()), 'form-success')
+
+    return render_template(
+        'admin/manage_user.html',
+        user=user,
+        form=form
+    )
 
 
 @admin.route('/user/<int:user_id>/delete')

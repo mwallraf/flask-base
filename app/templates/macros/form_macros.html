@@ -110,7 +110,7 @@
         {% set extra_classes = extra_classes + ' grouped fields' %}
     {% endif %}
     <div class="field {% if field.errors %}error{% endif %} {{ extra_classes }}">
-        {{ render_form_input(field) }}
+        {{ render_form_input(field, extra_classes) }}
         {% if field.errors %}
             <div class="ui red pointing label">
                 {{ field.errors[0] | safe }}
@@ -119,7 +119,7 @@
     </div>
 {% endmacro %}
 
-{% macro render_form_input(field) %}
+{% macro render_form_input(field, extra_classes='') %}
     {% if field.widget.input_type == 'checkbox' %}
         <div class="ui checkbox">
             {{ field }}
@@ -139,6 +139,8 @@
         {{ render_form(field) }}
     {% elif field.type == 'CustomSelectField' %}
         {{ render_custom_select(field) }}
+    {% elif field.type == 'HiddenField' %}
+        {{ field(placeholder=field.label.text, class_=extra_classes) }}
     {% else %}
         {{ field.label }}
         {% if field.description %}
@@ -146,6 +148,18 @@
                 {{ field.description }}
             </div>
         {% endif %}
-        {{ field(placeholder=field.label.text) }}
+        {{ field(placeholder=field.label.text, class_=extra_classes) }}
+    {% endif %}
+{% endmacro %}
+
+
+{# Add colored keywords with a draggable class, used to drag the text inside another element like textfield #}
+{% macro draggable_keywords(keywords, color="yellow") %}
+    {% if keywords %}
+        <div>
+            {% for kw in keywords %}
+                <div class="ui {{ color }} horizontal label draggable">{{ kw.keyword }}</div>
+            {% endfor %}
+        </div>
     {% endif %}
 {% endmacro %}

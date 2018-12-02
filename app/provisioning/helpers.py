@@ -1,44 +1,62 @@
-from flask import current_app as app, render_template
-from jinja2 import meta
+#from flask import current_app as app, render_template
+#from jinja2 import meta
+
+from jinja2 import Environment, FunctionLoader, select_autoescape, meta
+from app.models import ProvisioningTemplate
 
 
-def get_all_snippets(bp):
-    """Return a list of templates as a dict:
-       {
-            'template': { 'template': '' }
-       }
+def load_template(template_name):
+    template = ProvisioningTemplate.query.filter_by(name=template_name).first()
 
-       Maybe the templates will be stored in DB later so for 
-       now we already reaturn the templates as a string that
-       can be rendered as render_template_string()
-    """
-    result = {}
-
-    loader = bp.jinja_loader
-    env = app.jinja_env
-
-    if loader is not None:
-        result = { template: { 'template': get_template(env, template), 'vars': get_template_vars(template)} for template in loader.list_templates() if _is_valid_snippet(template) }
-    return result
+    return template.template if template else None
 
 
-def _is_valid_snippet(tpl):
-    """Check if the snippet can be used as a template
-    """
-    if 'snippets' not in tpl:
-        return False
-    if not tpl.endswith("j2"):
-        return False
-    if tpl.startswith("."):
-        return False
-    return True
+def create_jinja_env():
+    env = Environment(
+        loader=FunctionLoader(load_template),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    return env
 
-def get_template(env, tpl):
-    """Return the source of a template
-    """
-    #print(tpl)
-    tplsrc = env.loader.get_source(env, tpl)[0]
-    return tplsrc
+
+#def get_all_snippets(bp):
+#    """Return a list of templates as a dict:
+#       {
+#            'template': { 'template': '' }
+#       }
+#
+#       Maybe the templates will be stored in DB later so for 
+#       now we already reaturn the templates as a string that
+#       can be rendered as render_template_string()
+#    """
+#    result = {}
+#
+#    loader = bp.jinja_loader
+#    env = app.jinja_env
+#
+#    if loader is not None:
+#        result = { template: { 'template': get_template(env, template), 'vars': get_template_vars(template)} for template in loader.list_templates() if _is_valid_snippet(template) }
+#    return result
+
+
+#def _is_valid_snippet(tpl):
+#    """Check if the snippet can be used as a template
+#    """
+#    if 'snippets' not in tpl:
+#        return False
+#    if not tpl.endswith("j2"):
+#        return False
+#    if tpl.startswith("."):
+#        return False
+#    return True
+
+
+#def get_template(env, tpl):
+#    """Return the source of a template
+#    """
+#    #print(tpl)
+#    tplsrc = env.loader.get_source(env, tpl)[0]
+#    return tplsrc
 
 
 def get_template_vars(templatename, ignorevars=[], sort=True, maxnestlevels=100):
@@ -57,7 +75,8 @@ def get_template_vars(templatename, ignorevars=[], sort=True, maxnestlevels=100)
     templatesseen = []
     nestlevels = 0
 
-    env = app.jinja_env
+    #env = app.jinja_env
+    env = create_jinja_env()
 
     templates.append(templatename)
     templatesseen.append(templatename)
@@ -91,6 +110,7 @@ def get_template_vars(templatename, ignorevars=[], sort=True, maxnestlevels=100)
     else:
         return tplvars
 
+
 # def get_unset_template_vars(ignorevars=[]):
 #     """Return a list of variables that have no assigned value
 # 
@@ -100,3 +120,4 @@ def get_template_vars(templatename, ignorevars=[], sort=True, maxnestlevels=100)
 #     tplvars = get_template_vars()
 # 
 #     return [e for e in tplvars if not e in self.variables]
+

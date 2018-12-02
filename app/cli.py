@@ -41,7 +41,6 @@ def inventory_device_delete(hostname):
     return True    
 
 
-
 def inventory_all_sites():
     db = TinyDB(tinydb_site_facts)
     return db

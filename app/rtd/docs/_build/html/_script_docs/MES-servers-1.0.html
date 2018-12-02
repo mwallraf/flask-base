@@ -1,0 +1,1124 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MES server inventory &mdash; stst01bru-docs 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ERS Parser" href="ers-parser.v1-0.html" />
+    <link rel="prev" title="Welcome to stst01bru-docs’s documentation!" href="../index.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> stst01bru-docs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MES server inventory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version">Version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#server-list">Server list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#server-details">Server details</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#stst01bru">stst01bru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stst01ant">stst01ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#syslog01bru">syslog01bru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#syslog01ant">syslog01ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tacacs01ant">tacacs01ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tacacs01bru">tacacs01bru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#script01bru">script01bru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#script02bru">script02bru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nsm01bru">nsm01bru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nsm02bru">nsm02bru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nm5620bru-1">nm5620bru-1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nm5620ant-1">nm5620ant-1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#template">TEMPLATE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ers-parser.v1-0.html">ERS Parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provisioning-pxs-explore-swap-links.html">Proximus Explore - Swap main-backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vdsl2-update-qos.html">VDSL2 UPDATE QOS</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">stst01bru-docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>MES server inventory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_script_docs/MES-servers-1.0.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mes-server-inventory">
+<h1>MES server inventory<a class="headerlink" href="#mes-server-inventory" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version">
+<h2>Version<a class="headerlink" href="#version" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">1.0</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Last updated:</th><td class="field-body">20-sep-2017</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Maarten Wallraf</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>A list of all the servers used by MES in the datacenters.
+We have to identify the server, hardware, applications and ownership.</p>
+</div>
+<div class="section" id="server-list">
+<h2>Server list<a class="headerlink" href="#server-list" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Servername</th>
+<th class="head">Function</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#stst01bru">stst01bru</a></td>
+<td>primary SSH stepstone server</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#stst01ant">stst01ant</a></td>
+<td>backup SSH stepstone server</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#syslog01bru">syslog01bru</a></td>
+<td>syslog server</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#syslog01ant">syslog01ant</a></td>
+<td>syslog server</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tacacs01ant">tacacs01ant</a></td>
+<td>primary tacacs server</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tacacs01bru">tacacs01bru</a></td>
+<td>backup tacacs server</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#script01bru">script01bru</a></td>
+<td>script server</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#script02bru">script02bru</a></td>
+<td>script server</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#nsm01bru">nsm01bru</a></td>
+<td>primary SSG management server</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#nsm02bru">nsm02bru</a></td>
+<td>backup SSG management server</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#nm5620bru-1">nm5620bru-1</a></td>
+<td>primary ATM Newbridge server</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#nm5620ant-1">nm5620ant-1</a></td>
+<td>backup ATM Newbridge server</td>
+</tr>
+<tr class="row-even"><td>isc01</td>
+<td>primary ISC server</td>
+</tr>
+<tr class="row-odd"><td>isc02</td>
+<td>backup ISC server</td>
+</tr>
+<tr class="row-even"><td>testisc</td>
+<td>test ISC and general dev server</td>
+</tr>
+<tr class="row-odd"><td>oribi</td>
+<td>Splunk server</td>
+</tr>
+<tr class="row-even"><td>boar</td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-odd"><td>boron</td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td>grwclu01ant</td>
+<td>groundwork cluster server</td>
+</tr>
+<tr class="row-odd"><td>grwclu02ant</td>
+<td>groundwork cluster server</td>
+</tr>
+<tr class="row-even"><td>grwclu03ant</td>
+<td>groundwork cluster server</td>
+</tr>
+<tr class="row-odd"><td>grwclu04ant</td>
+<td>groundwork cluster server</td>
+</tr>
+<tr class="row-even"><td>grwclu05ant</td>
+<td>groundwork cluster server</td>
+</tr>
+<tr class="row-odd"><td>grwclu06ant</td>
+<td>groundwork cluster server</td>
+</tr>
+<tr class="row-even"><td>grwclu07ant</td>
+<td>groundwork cluster server</td>
+</tr>
+<tr class="row-odd"><td>grwclu08nos</td>
+<td>groundwork cluster servere</td>
+</tr>
+<tr class="row-even"><td>grwmon01ant</td>
+<td>groundwork poller server</td>
+</tr>
+<tr class="row-odd"><td>grwmon02ant</td>
+<td>groundwork poller server</td>
+</tr>
+<tr class="row-even"><td>omeap1</td>
+<td>OME servers</td>
+</tr>
+<tr class="row-odd"><td>ntp01bru</td>
+<td>NTP server</td>
+</tr>
+<tr class="row-even"><td>ntp01ant</td>
+<td>NTP server</td>
+</tr>
+<tr class="row-odd"><td>bdell101</td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td>bdell102</td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-odd"><td>bdell103</td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td>bdell104</td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-odd"><td>bdell106</td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td>bdell107</td>
+<td>prod/dev server for MES tools (duty, ..)</td>
+</tr>
+<tr class="row-odd"><td>bdell108</td>
+<td>prod server for MES tools (duty, ..)</td>
+</tr>
+<tr class="row-even"><td>bdell109</td>
+<td>WEB server for MES tools (duty, ..)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="server-details">
+<h2>Server details<a class="headerlink" href="#server-details" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="stst01bru">
+<h3>stst01bru<a class="headerlink" href="#stst01bru" title="Permalink to this headline">¶</a></h3>
+<p>primary SSH stepstone server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>stst01bru</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>stst01bru.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>PRIMARY MES stepping stone server to access all network equipment</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>SSH gateway, tftp server, inventory scripts under /opt (findhost, backups, configs, …)</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.96.16/24, 91.208.220.16/25, 91.208.220.30/25, 62.58.62.158/32, 62.58.126.101/32</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>CentOS release 5.3 (Final)</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Nossegem</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="stst01ant">
+<h3>stst01ant<a class="headerlink" href="#stst01ant" title="Permalink to this headline">¶</a></h3>
+<p>backup SSH stepstone server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="73%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>stst01ant</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>stst01ant.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>BACKUP MES stepping stone server to access all network equipment</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>SSH gateway, tftp server</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.32.16/24, 91.208.220.134/25</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>CentOS release 5.3 (Final)</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Antwerp</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="syslog01bru">
+<h3>syslog01bru<a class="headerlink" href="#syslog01bru" title="Permalink to this headline">¶</a></h3>
+<p>syslog server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>syslog01bru</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>syslog01bru</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>syslog server for MES CPE + PE</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>syslog-ng</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.96.15/24</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Nossegem</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">server</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">present</span> <span class="pre">anymore</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">rack,</span> <span class="pre">no</span> <span class="pre">replacement</span> <span class="pre">available</span></code></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="syslog01ant">
+<h3>syslog01ant<a class="headerlink" href="#syslog01ant" title="Permalink to this headline">¶</a></h3>
+<p>syslog server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="58%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>syslog01ant</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>syslog01ant.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>syslog collector for MES CPE + PE</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>syslog-ng</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.32.15/24, 91.208.220.143/25</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>debian 4.0</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Antwerp</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="tacacs01ant">
+<h3>tacacs01ant<a class="headerlink" href="#tacacs01ant" title="Permalink to this headline">¶</a></h3>
+<p>primary tacacs server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>tacacs01ant</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>tacacs01ant.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>primary tacacs server for all MES equipment</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>Radiator</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.32.14/24, 91.208.220.142/25, 91.208.220.132/25, 91.208.220.133/25, 62.58.143.150/32, 62.58.157.150/32</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>debian 4.0</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Antwerp</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="tacacs01bru">
+<h3>tacacs01bru<a class="headerlink" href="#tacacs01bru" title="Permalink to this headline">¶</a></h3>
+<p>backup tacacs server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>tacacs01bru</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>tacacs01bru.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>backup tacacs server for all MES equipment</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>Radiator</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.96.14/24, 91.208.220.14/25, 91.208.220.4/25, 91.208.220.5/25, 62.58.62.158/32, 62.58.126.101/32</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>debian 4.0</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Nossegem</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="script01bru">
+<h3>script01bru<a class="headerlink" href="#script01bru" title="Permalink to this headline">¶</a></h3>
+<p>script server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="73%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>script01bru</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>script01bru.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>script server, MES tools like line migration, Harris tester, …</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>apache, python, perl</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.96.101/24</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>debian 4.0</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Nossegem</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="script02bru">
+<h3>script02bru<a class="headerlink" href="#script02bru" title="Permalink to this headline">¶</a></h3>
+<p>script server (staging)</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="47%" />
+<col width="53%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>script02bru</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>script02bru.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>staging server for scripts</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>no dedicated applications</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.96.102/24</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>CentOS release 5.3 (Final)</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Nossegem</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="nsm01bru">
+<h3>nsm01bru<a class="headerlink" href="#nsm01bru" title="Permalink to this headline">¶</a></h3>
+<p>primary SSG management server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>nsm01bru</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>nsm01bru.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>primary SSG management server</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>NSM firewall manager</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.96.191/24, 91.208.220.91/25</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>Juniper NSMXPress OS build 4.130764, NSM 2008.2r2</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Nossegem</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td>Infradata</td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="nsm02bru">
+<h3>nsm02bru<a class="headerlink" href="#nsm02bru" title="Permalink to this headline">¶</a></h3>
+<p>backup SSG management server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>nsm02bru</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>nsm02bru.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>backup SSG management server</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>NSM firewall manager</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.96.192/24, 91.208.220.92/25</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>Juniper NSMXPress OS build 4.130764, NSM 2008.2r2</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Nossegem</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td>Infradata</td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="nm5620bru-1">
+<h3>nm5620bru-1<a class="headerlink" href="#nm5620bru-1" title="Permalink to this headline">¶</a></h3>
+<p>primary ATM Newbridge server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>nm5620bru-1</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>nm5620bru-1.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>Primary Newbridge management server</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>Go-Global, Newbridge NM</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.96.205/24, 14.1.99.205/24</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>SunOS 5.10, Netra-T2000</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Nossegem</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td>Alcatel</td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>Currently in disabled state to make Antwerp the primary server.
+Check/stop/start services with <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">/opt/netmgt/bin/RED_comms</span></code></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="nm5620ant-1">
+<h3>nm5620ant-1<a class="headerlink" href="#nm5620ant-1" title="Permalink to this headline">¶</a></h3>
+<p>backup ATM Newbridge server</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>nm5620ant-1</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>nm5620ant-1.dcn.as47377.net</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>Backup Newbridge management server</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>Go-Global, Newbridge NM</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>10.0.96.205/24, 14.1.99.205/24</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>SunOS 5.10, Netra-T2000</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>Antwerp</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>DOPS</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>Tech Mahindra</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>appliance</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td>Alcatel</td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>Currently in forced to be the primary server.
+Check/stop/start services with <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">/opt/netmgt/bin/RED_comms</span></code></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="template">
+<h3>TEMPLATE<a class="headerlink" href="#template" title="Permalink to this headline">¶</a></h3>
+<p>description</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="67%" />
+<col width="33%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>hostname</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><strong>dns name</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><strong>function</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><strong>applications</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><strong>ip address(es)</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><strong>os</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><strong>location</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><strong>team</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><strong>backup</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>apps managed by</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><strong>server managed by</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><strong>appliance/virtual</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><strong>support contract</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>remarks</strong></td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ers-parser.v1-0.html" class="btn btn-neutral float-right" title="ERS Parser" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Welcome to stst01bru-docs’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Maarten Wallraf
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

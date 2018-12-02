@@ -2,13 +2,16 @@
 {% import 'macros/form_macros.html' as f %}
 
 {% set deletion_endpoint = 'provisioning.delete_template_request' %}
+{% set update_endpoint = 'provisioning.update_template' %}
 
 {% set endpoints = [
-    ('provisioning.manage_template', 'Template information')
+    ('provisioning.manage_template', 'Template information'),
+    ('provisioning.generate_configuration_template', 'Test rendering')
 ] %}
 
 {% if current_user.is_admin() %}
     {% set endpoints = endpoints + [
+            (update_endpoint, 'Update template'),
             (deletion_endpoint, 'Delete template')
        ]
     %}
@@ -25,10 +28,24 @@
     </div>
 {% endmacro %}
 
+{% macro expand_options(template) %}
+    {% set all_options = template.get_options() %}
+    {% set option_values = template.extract_options(prepend="") %}
+    {% for option in all_options %}
+        <tr><td>{{ option[0]|upper }}{{ option[1::] }}</td><td>{{ option_values[option] }}</td></tr>
+    {% endfor %}
+{% endmacro %}
+
 {% macro template_info(template) %}
     <table class="ui compact definition table">
         <tr><td>Name</td><td>{{ template.name }}</td></tr>
-        <tr><td>Description</td><td>{{ template.description }}</td></tr>
+        <tr><td>Enabled</td><td>{{ template.enabled }}</td></tr>
+        {{ expand_options(template) }}
+        <tr><td>Created By</td><td>{{ template.created_by.full_name() }}</td></tr>
+        <tr><td>Created At</td><td>{{ template.created_at }}</td></tr>
+        <tr><td>Updated By</td><td>{{ template.updated_by.full_name() }}</td></tr>
+        <tr><td>Updated At</td><td>{{ template.updated_at }}</td></tr>
+        <tr><td>Template</td><td><pre>{{ template.template }}</pre></td></tr>
     </table>
 {% endmacro %}
 
@@ -74,7 +91,22 @@
                     </div>
                     </div>
                 {% elif form %}
+                    {% if request.endpoint == update_endpoint %}
+                        {{ f.draggable_keywords(keywords) }}
+                    {% endif %}
+                    
                     {{ f.render_form(form) }}
+                    {% if rendered_template %}
+                        <div class="content">
+                            Rendered template
+                            <div class="sub header">
+                                The result of the rendered template
+                            </div>
+                            <pre>
+                                {{ rendered_template }}
+                            </pre>
+                        </div>                        
+                    {% endif %}
                 {% else %}
                     {{ template_info(template) }}
                 {% endif %}
@@ -91,6 +123,56 @@
             onUnchecked: function() {
                 $('.deletion.button').addClass('disabled').removeAttr('href');
             }
+        });
+
+        $(document).ready(function() {
+
+            $("#template").addClass("droppable");
+
+
+            $.fn.insertAtCaret = function (myValue) {
+              return this.each(function(){
+              //IE support
+              if (document.selection) {
+                this.focus();
+                sel = document.selection.createRange();
+                sel.text = myValue;
+                this.focus();
+              }
+              //MOZILLA / NETSCAPE support
+              else if (this.selectionStart || this.selectionStart == '0') {
+                var startPos = this.selectionStart;
+                var endPos = this.selectionEnd;
+                var scrollTop = this.scrollTop;
+                this.value = this.value.substring(0, startPos)+ myValue+ this.value.substring(endPos,this.value.length);
+                this.focus();
+                this.selectionStart = startPos + myValue.length;
+                this.selectionEnd = startPos + myValue.length;
+                this.scrollTop = scrollTop;
+              } else {
+                this.value += myValue;
+                this.focus();
+              }
+              });
+            };
+
+            $(function() {         
+                $( ".draggable").draggable({
+                    helper: 'clone',
+                    cursor: 'pointer',
+                    start: function (ui){
+                        $(ui.helper).addClass("dragging");
+                    }
+                });
+
+                $( ".droppable" ).droppable({
+                    accept: ".draggable",                        
+                    drop: function(ev, ui) {
+                        $(this).insertAtCaret(" \{\{ " + ui.draggable.text() + " \}\} ");
+                    }
+                });
+
+            });    
         });
     </script>
 {% endblock %}

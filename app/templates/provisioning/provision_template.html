@@ -1,0 +1,259 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% block scripts %}
+{% endblock %}
+
+{% macro render_job(job) %}
+    <div id="job-status" class="ui message">
+        <span id="job-status-msg"></span>
+    </div>
+
+    <pre id="job-details" class="job-output"></pre>
+{% endmacro %}
+
+
+{% block content %}
+
+    <style>
+    .rendered-template {
+        color: #ffc72c;
+        background-color: #425563;
+    }
+    </style>
+
+
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <a class="ui basic compact button" href="{{ url_for('provisioning.templates') }}">
+                <i class="caret left icon"></i>
+                Back to templates
+            </a>
+            <h2 class="ui header">
+                {{ template.name }}
+                <div class="sub header">Render the template and provision to the network</div>
+            </h2>
+
+            {% set flashes = {
+                'error':   get_flashed_messages(category_filter=['form-error']),
+                'warning': get_flashed_messages(category_filter=['form-check-email']),
+                'info':    get_flashed_messages(category_filter=['form-info']),
+                'success': get_flashed_messages(category_filter=['form-success'])
+            } %}
+
+            {{ f.begin_form(form, flashes) }}
+
+                {{ f.render_form(form) }}
+
+
+                {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
+                {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
+                {{ f.form_message(flashes['info'], header='Information', class='info') }}
+                {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+
+            {{ f.end_form() }}
+        </div>
+
+        <div class="twelve wide column">
+            {% if rendered_template %}
+
+                <h4 class="ui horizontal divider header">
+                  Generated config
+                </h4>
+
+                <div>
+                    <button id="button-send-device" class="ui primary basic button">Send to device</button>
+                    <button id="button-download-config" class="ui primary basic button">Download config</button>      
+                </div>
+
+                <div class="content">
+                    <pre id="rendered-template" class="rendered-template">
+                        {{ rendered_template }}
+                    </pre>
+                </div>                        
+
+
+                <div class="hidden content task-output">
+                    <h4 class="ui horizontal divider header">
+                      Task output
+                    </h4>
+                    
+                    {{ render_job(job) }}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL -->
+    <div class="ui modal modal-send-device">
+        <i class="close icon"></i>
+        <div class="header">
+            Connection details
+        </div>
+                <div class="content">
+                    {{ f.begin_form(connection_form, flashes, extra_classes="equal width connection-form") }}
+                    {{ f.render_form_field(connection_form.hostname) }}
+                    <div class="fields">
+                            {{ f.render_form_field(connection_form.username) }}
+                            {{ f.render_form_field(connection_form.password) }}
+                    </div>
+                    {{ f.render_form_field(connection_form.driver) }}
+                    {{ f.render_form_field(connection_form.transport) }}
+                    {{ f.render_form_field(connection_form.config) }}
+                    {{ f.end_form() }}
+                </div>
+                <div class="actions">
+                    <div class="ui button close modal-cancel">Cancel</div>
+                    <div id="button-confirm-send-device" class="ui button" type="submit">Send config</div>
+                </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+
+            $('select.dropdown')
+                 .dropdown()
+            ;
+
+            // attach modal to the right button
+            $('.modal-send-device.modal')
+              .modal({
+                centered: false
+              })
+              .modal('attach events', '#button-send-device', 'show')
+            ;
+
+            $(".modal-cancel").click(function(e) {
+                $('.modal-send-device.modal')
+                    .modal('hide');
+            });
+
+            function saveText(ref, fname, text, mime)
+            {
+              var blob = new Blob([text], {type: mime});
+              saveAs(blob, fname);
+
+              return false;
+            }
+
+            $("#button-download-config").click(function(e) {
+                saveText(this, "somefiles.txt", $("#rendered-template").text(), 'text/html;charset=utf-8')
+            });
+
+            $("#button-confirm-send-device").click(function(e) {
+                $("#config").val($("#rendered-template").text());
+                e.preventDefault();
+                $(".task-output").removeClass("hidden");
+                sendToDevice();
+                $('.modal-send-device.modal')
+                    .modal('hide');
+            });
+
+            $.fn.insertAtCaret = function (myValue) {
+              return this.each(function(){
+              //IE support
+              if (document.selection) {
+                this.focus();
+                sel = document.selection.createRange();
+                sel.text = myValue;
+                this.focus();
+              }
+              //MOZILLA / NETSCAPE support
+              else if (this.selectionStart || this.selectionStart == '0') {
+                var startPos = this.selectionStart;
+                var endPos = this.selectionEnd;
+                var scrollTop = this.scrollTop;
+                this.value = this.value.substring(0, startPos)+ myValue+ this.value.substring(endPos,this.value.length);
+                this.focus();
+                this.selectionStart = startPos + myValue.length;
+                this.selectionEnd = startPos + myValue.length;
+                this.scrollTop = scrollTop;
+              } else {
+                this.value += myValue;
+                this.focus();
+              }
+              });
+            };
+
+            $(function() {         
+                $( ".draggable").draggable({
+                    helper: 'clone',
+                    cursor: 'pointer',
+                    start: function (ui){
+                        $(ui.helper).addClass("dragging");
+                    }
+                });
+
+                $( ".droppable" ).droppable({
+                    accept: ".draggable",                        
+                    drop: function(ev, ui) {
+                        $(this).insertAtCaret(" \{\{ " + ui.draggable.text() + " \}\} ");
+                    }
+                });
+
+            });
+
+
+            // send the config to a device
+            function sendToDevice() {
+              $.ajax({
+                url: `/provisioning/tasks/sendtodevice`,
+                data: $(".connection-form").serialize(),
+                method: 'POST'
+              })
+              .done((res) => {
+                //alert(res.data);
+                getStatus(res.data.task_id);
+              })
+              .fail((err) => {
+                console.log(err);
+              });
+            }
+
+            function getStatus(taskID) {
+              $.ajax({
+                url: `/inventory/tasks/${taskID}`,
+                method: 'GET'
+              })
+              .done((res) => {
+                const html = `
+                  <tr>
+                    <td>${res.data.task_id}</td>
+                    <td>${res.data.task_status}</td>
+                    <td>${res.data.task_result}</td>
+                  </tr>`
+                const taskStatus = res.data.task_status;
+                if (taskStatus === 'finished') {
+                    $('#job-status-msg').html("The task has finished.");
+                    $('#job-status').removeClass("error info warning").addClass("success");
+                }
+                else if (taskStatus === 'failed') {
+                    $('#job-status-msg').html("Oops .. something went wrong ...");
+                    $('#job-status').removeClass("info warning success").addClass("error");
+                }
+                else {
+                    $('#job-status-msg').html("Task status = '" + taskStatus + "'. Wait until the task is finished to see the result.");
+                    $('#job-status').removeClass("warning error success").addClass("info");
+                }
+                if (taskStatus === 'finished' || taskStatus === 'failed') {
+                    $('#job-details').html(res.data.task_result);
+                    return false;
+                }
+                setTimeout(function() {
+                  getStatus(res.data.task_id);
+                }, 1000);
+              })
+              .fail((err) => {
+                console.log(err);
+              });
+            }
+
+
+        });
+    </script>
+{% endblock %}

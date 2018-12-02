@@ -1,0 +1,58 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% block scripts %}
+{% endblock %}
+
+
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <a class="ui basic compact button" href="{{ url_for('provisioning.index') }}">
+                <i class="caret left icon"></i>
+                Back to provisioning dashboard
+            </a>
+            <h2 class="ui header">
+                Add New Template Keyword
+                <div class="sub header">Create a new Template Keyword definition</div>
+            </h2>
+
+            {% set flashes = {
+                'error':   get_flashed_messages(category_filter=['form-error']),
+                'warning': get_flashed_messages(category_filter=['form-check-email']),
+                'info':    get_flashed_messages(category_filter=['form-info']),
+                'success': get_flashed_messages(category_filter=['form-success'])
+            } %}
+
+            {{ f.begin_form(form, flashes) }}
+
+                {{ f.render_form_field(form.keyword) }}
+                {{ f.render_form_field(form.type) }}
+                {{ f.render_form_field(form.description) }}
+                <div class="two fields">
+                    {{ f.render_form_field(form.value) }}
+                    {{ f.render_form_field(form.default_value) }}
+                </div>
+                {{ f.render_form_field(form.regex) }}
+                {{ f.render_form_field(form.widget) }}
+
+                {% for option in form.get_options() %}
+                    {{ f.render_form_field(form[option]) }}
+                {% endfor %}
+
+                {{ f.render_form_field(form.required) }}
+
+
+                {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
+                {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
+                {{ f.form_message(flashes['info'], header='Information', class='info') }}
+                {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+
+                {% for field in form | selectattr('type', 'equalto', 'SubmitField') %}
+                    {{ f.render_form_field(field) }}
+                {% endfor %}
+
+            {{ f.end_form() }}
+        </div>
+    </div>
+{% endblock %}

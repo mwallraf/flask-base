@@ -8,8 +8,10 @@ vendor_css = Bundle('vendor/semantic.min.css', output='styles/vendor.css')
 
 vendor_js = Bundle(
     'vendor/jquery.min.js',
+    'vendor/jquery-ui.min.js',
     'vendor/semantic.min.js',
     'vendor/tablesort.min.js',
     'vendor/zxcvbn.js',
+    'vendor/FileSaver.js',
     filters='jsmin',
     output='scripts/vendor.js')

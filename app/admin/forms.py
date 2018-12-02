@@ -5,6 +5,7 @@ from wtforms.fields import (
     PasswordField,
     StringField,
     SubmitField,
+    BooleanField
 )
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import (
@@ -37,6 +38,24 @@ class ChangeAccountTypeForm(Form):
         get_label='name',
         query_factory=lambda: db.session.query(Role).order_by('permissions'))
     submit = SubmitField('Update role')
+
+
+class UpdateUserForm(Form):
+    first_name = StringField(
+        'First name', validators=[InputRequired(),
+                                  Length(1, 64)])
+    last_name = StringField(
+        'Last name', validators=[InputRequired(),
+                                 Length(1, 64)])
+    password = PasswordField(
+        'Password',
+        validators=[
+            InputRequired(),
+            EqualTo('password2', 'Passwords must match')
+        ])
+    password2 = PasswordField('Confirm password', validators=[InputRequired()])
+    confirmed = BooleanField('User has been confirmed', default=False)
+    submit = SubmitField('Update')
 
 
 class InviteUserForm(Form):
