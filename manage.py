@@ -11,9 +11,32 @@ from app import create_app, db
 from app.models import Role, User
 from config import Config
 
+from logging import basicConfig, DEBUG, info, StreamHandler
+from logging.handlers import RotatingFileHandler
+
+
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
+
+
+
+def configure_logs(app):
+    basicConfig(
+        level=DEBUG,
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        datefmt='%m-%d-%Y %H:%M:%S',
+        handlers=[
+            RotatingFileHandler(
+                ('logs/toolbox.log'),
+                maxBytes=20000000,
+                backupCount=10
+            ),
+            StreamHandler()
+        ]
+    )
+
+configure_logs(app)
 
 
 def make_shell_context():
