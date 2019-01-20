@@ -4,6 +4,13 @@
 {% block content %}
     <div class="ui stackable grid container">
         <div class="sixteen wide tablet twelve wide computer centered column">
+
+            {% if current_user.is_admin() %}
+                <div class="ui right floated icon basic compact button with-popup" data-content="Add a new template" onclick="window.open('{{ url_for('provisioning.new_template') }}', '_self')">
+                    <i class="olive add icon"></i>
+                </div>
+            {% endif %}
+
             <a class="ui basic compact button" href="{{ url_for('provisioning.index') }}">
                 <i class="caret left icon"></i>
                 Back to provisioning dashboard

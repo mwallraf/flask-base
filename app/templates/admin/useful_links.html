@@ -5,19 +5,19 @@
         <div class="sixteen wide tablet twelve wide computer centered column">
 
             {% if current_user.is_admin() %}
-                <div class="ui right floated icon basic compact button with-popup" data-content="Add a new keyword" onclick="window.open('{{ url_for('provisioning.new_keyword') }}', '_self')">
+                <div class="ui right floated icon basic compact button with-popup" data-content="Add a new link" onclick="window.open('{{ url_for('admin.new_useful_link') }}', '_self')">
                     <i class="olive add icon"></i>
                 </div>
             {% endif %}
 
-            <a class="ui basic compact button" href="{{ url_for('provisioning.index') }}">
+            <a class="ui basic compact button" href="{{ url_for('admin.index') }}">
                 <i class="caret left icon"></i>
-                Back to provisioning dashboard
+                Back to admin dashboard
             </a>
             <h2 class="ui header">
-                Keywords
+                Useful links
                 <div class="sub header">
-                    View and manage network keywords.
+                    View and manage useful links.
                 </div>
             </h2>
 
@@ -27,13 +27,15 @@
                 <table class="ui searchable sortable unstackable selectable celled table">
                     <thead>
                         <tr>
-                            <th>Keyword</th>
+                            <th>Name</th>
+                            <th>URL</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {% for k in keywords | sort(attribute='order') %}
-                        <tr>
-                            <td onclick="window.location.href='{{ url_for('provisioning.manage_keyword', keyword_id=k.id) }}';">{{ k.keyword }}</td>
+                    {% for k in useful_links | sort(attribute='name') %}
+                        <tr onclick="window.location.href='{{ url_for('admin.manage_useful_link', useful_link_id=k.id) }}';">
+                            <td>{{ k.name }}</td>
+                            <td>{{ k.url }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

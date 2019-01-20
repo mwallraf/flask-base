@@ -6,3 +6,5 @@ module (as opposed to just their python files)
 from .user import *  # noqa
 from .miscellaneous import *  # noqa
 from .provisioning import *  # noqa
+from .inventory import * # noqa
+from .usefullinks import * # noqa

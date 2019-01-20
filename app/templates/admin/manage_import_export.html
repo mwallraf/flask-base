@@ -1,0 +1,127 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+
+{% set export_endpoint = 'admin.export_functions' %}
+{% set import_endpoint = 'admin.import_functions' %}
+
+{% set endpoints = [
+        (export_endpoint, 'Export functions')    
+   ] 
+%}
+
+{% if current_user.is_admin() %}
+    {% set endpoints = endpoints + [
+            (import_endpoint, 'Import functions')
+       ]
+    %}
+{% endif %}
+
+{% macro navigation(items) %}
+    <div class="ui vertical fluid secondary menu">
+        {% for route, name in items %}
+            {% set href = url_for(route) %}
+            <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
+                {{ name }}
+            </a>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro site_info() %}
+    <h3 class="ui block header">
+        <i class="warning circle icon"></i>
+        <div class="content">
+            Import or export database content 
+            <div class="sub header">
+                Make sure you understand the risks of importing data into the database.
+            </div>
+        </div>
+    </h3>
+{% endmacro %}
+
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <a class="ui basic compact button" href="{{ url_for('admin.index') }}">
+                <i class="caret left icon"></i>
+                Back admin dashboard
+            </a>
+            <h2 class="ui header">
+                <div class="sub header">Inventory import and export functions.</div>
+            </h2>
+        </div>
+        <div class="stretched divided very relaxed row">
+            <div class="four wide column">
+                {{ navigation(endpoints) }}
+            </div>
+            <div class="eight wide column">
+                {% if request.endpoint == export_endpoint %}
+                    <div class="ui message">
+                      <div class="header">
+                        Export to JSON
+                      </div>
+                      <p>Export all devices and sites to a single file in JSON format</p>
+                      {% set url_export_json = url_for('admin.export_json') %}
+                      <button class="positive ui button" onclick="window.open('{{ url_export_json }}');">Download JSON</button>
+                    </div>
+                {% elif request.endpoint == import_endpoint %}
+                    {% if form %}
+
+                        {% set flashes = {
+                            'error':   get_flashed_messages(category_filter=['form-error']),
+                            'warning': get_flashed_messages(category_filter=['form-check-email']),
+                            'info':    get_flashed_messages(category_filter=['form-info']),
+                            'success': get_flashed_messages(category_filter=['form-success'])
+                        } %}
+
+                        {{ f.begin_form(form, flashes) }}
+
+                            <div class="ui form">
+                                <div class="ui message">
+                                    <div class="ui header">
+                                      Import data from a JSON file
+                                    </div>
+                                    <p>Provide a JSON file and import data directly into the database. Use the template file below as an example</p>
+
+                                    {{ f.render_form_field(form.jsonfile) }}
+
+                                    <h4 style="color:red">WARNING - the import process could destroy existing data !</h4>
+
+                                    {{ f.render_form_input(form.submit, extra_classes="ui disabled negative deletion submit button") }}
+
+                                    {% set url_import_json_example = url_for('admin.import_json_example', sample=True) %}
+                                    <a class="positive ui button" onclick="window.open('{{ url_import_json_example }}');">Example import file</a>
+                                </div>
+                            </div>
+
+                        {{ f.end_form() }}
+
+                    {% endif %}
+                </div>
+
+                {% else %}
+                    {{ site_info() }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        $('input[type="file"]').change(function(e){
+            var fileName = e.target.files[0].name;
+            var validated = fileName.endsWith(".json");
+
+            if (validated) {
+                $("#submit").removeClass("disabled");
+            }
+            else {
+                alert('We expect a json import file. Use the sample import file as ane example.');
+                $("#submit").addClass("disabled");
+            }
+
+        });
+
+    </script>
+{% endblock %}

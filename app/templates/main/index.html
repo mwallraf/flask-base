@@ -1,19 +1,19 @@
 {% extends 'layouts/base.html' %}
 
-{% macro dashboard_link(title, short_descr, image) %}
+{% macro dashboard_link(url, title, short_descr, image, popup="") %}
   <div class="card">
     <div class="blurring dimmable image">
       <div class="ui dimmer">
         <div class="content">
           <div class="center">
-            <div class="ui inverted button">Open link</div>
+            <div class="ui inverted button" onclick="window.open('{{ url }}', '_blank');">Open link</div>
           </div>
         </div>
       </div>
       <img src="{{ url_for('static', filename=image) }}" height="194">
     </div>
     <div class="content">
-      <a class="header">{{ title }}</a>
+      <a class="header with-popup" {% if popup %}data-content="{{ popup }}"{% endif %}>{{ title }}</a>
       <div class="meta">
         <span class="date">{{ short_descr }}</span>
       </div>
@@ -29,11 +29,14 @@
             </h2>
 
             <div class="ui special four cards mini">
-                {{ dashboard_link("Splunk", "Reports and dashboarding", "images/links/splunk.png") }}
-                {{ dashboard_link("GIT", "GIT code repository", "images/links/git.png") }}
-                {{ dashboard_link("Backups", "Direct link to backups", "images/links/backups.png") }}
-                {{ dashboard_link("Solarwinds", "Monitoring", "images/links/git.png") }}
-                {{ dashboard_link("", "", "images/links/git.png") }}
+                {{ dashboard_link("http://www.google.be", "Splunk", "Reports and dashboarding", "images/links/splunk.png", "Admin account = admin/Epiroc01") }}
+                {{ dashboard_link("http://www.google.be", "GIT", "GIT code repository", "images/links/git.png") }}
+                {{ dashboard_link("http://www.google.be", "Backups", "Direct link to backups", "images/links/backups.png") }}
+                {{ dashboard_link("http://www.google.be", "Solarwinds", "Monitoring", "images/links/git.png") }}
+                {{ dashboard_link("", "", "", "images/links/git.png") }}
+                {% for ul in useful_links %}
+                  {{ dashboard_link(ul.url, ul.title, ul.short_descr, ul.img, ul.tooltip ) }}
+                {% endfor %}
             </div>
 
         </div>

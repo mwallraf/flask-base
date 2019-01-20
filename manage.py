@@ -8,7 +8,7 @@ from redis import Redis
 from rq import Connection, Queue, Worker
 
 from app import create_app, db
-from app.models import Role, User
+from app.models import Role, User, InventoryCustomer, InventorySite, InventoryPool
 from config import Config
 
 from logging import basicConfig, DEBUG, info, StreamHandler
@@ -109,6 +109,12 @@ def setup_general():
             db.session.add(user)
             db.session.commit()
             print('Added administrator {}'.format(user.full_name()))
+    InventoryCustomer.insert_default_customer()
+    print('Added default customer')
+    InventorySite.insert_default_site()
+    print('Added default site')
+    InventoryPool.insert_default_pool()
+    print('Added default device pool')
 
 
 @manager.command

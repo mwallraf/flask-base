@@ -25,6 +25,12 @@ $(document).ready(function () {
       .toLowerCase().indexOf((text || "").toLowerCase()) > -1;
   }
 
+  // enable popups with data-content
+  $('.with-popup')
+    .popup()
+  ;
+
+
   $.expr[':'].icontains = $.expr.createPseudo ?
     $.expr.createPseudo(function (text) {
       return function (elem) {

@@ -4,16 +4,17 @@
 {% block scripts %}
 {% endblock %}
 
+
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
-            <a class="ui basic compact button" href="{{ url_for('inventory.devices') }}">
+            <a class="ui basic compact button" href="{{ url_for('provisioning.index') }}">
                 <i class="caret left icon"></i>
-                Back to devices
+                Back to admin dashboard
             </a>
             <h2 class="ui header">
-                Add New Device
-                <div class="sub header">Create a new network device</div>
+                Add New Useful Link
+                <div class="sub header">Create a new Useful Link definition</div>
             </h2>
 
             {% set flashes = {
@@ -25,15 +26,14 @@
 
             {{ f.begin_form(form, flashes) }}
 
-                <div class="two fields">
-                    {{ f.render_form_field(form.hostname) }}
-                    {{ f.render_form_field(form.domain) }}
-                </div>
-
-                {{ f.render_form_field(form.managementip) }}
-                {{ f.render_form_field(form.function) }}
-                {{ f.render_form_field(form.site_id) }}
-
+                {{ f.render_form_field(form.name) }}
+                {{ f.render_form_field(form.url) }}
+                {{ f.render_form_field(form.title) }}
+                {{ f.render_form_field(form.short_descr) }}
+                {{ f.render_form_field(form.long_descr) }}
+                {{ f.render_form_field(form.tooltip) }}
+                {{ f.render_form_field(form.enabled) }}
+                {{ f.render_form_field(form.img) }}
                 {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
                 {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
                 {{ f.form_message(flashes['info'], header='Information', class='info') }}
@@ -46,4 +46,5 @@
             {{ f.end_form() }}
         </div>
     </div>
+
 {% endblock %}

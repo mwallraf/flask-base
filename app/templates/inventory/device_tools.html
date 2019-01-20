@@ -11,7 +11,7 @@
 {% macro navigation(items) %}
     <div class="ui vertical fluid secondary menu">
         {% for route, name in items %}
-            {% set href = url_for(route, device_id=device.hostname) %}
+            {% set href = url_for(route, device_id=device.id) %}
             <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
                 {{ name }}
             </a>
@@ -22,8 +22,10 @@
 {% macro device_info(device) %}
     <table class="ui compact definition table">
         <tr><td>Hostname</td><td>{{ device.hostname }}</td></tr>
-        <tr><td>Management IP</td><td>{{ device.management_ip }}</td></tr>
-        <tr><td>Site ID</td><td>{{ device.siteid }}</td></tr>
+        <tr><td>Domain name</td><td>{{ device.domain }}</td></tr>
+        <tr><td>Management IP</td><td>{{ device.managementip }}</td></tr>
+        <tr><td>Function</td><td>{{ device.function }}</td></tr>
+        <tr><td>Site ID</td><td>{{ device.site.siteid }}</td></tr>
     </table>
 
 {% endmacro %}

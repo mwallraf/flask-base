@@ -1,19 +1,16 @@
 {% extends 'layouts/base.html' %}
 {% import 'macros/form_macros.html' as f %}
 
-
-{% set deletion_endpoint = 'inventory.delete_site_request' %}
-{% set update_endpoint = 'inventory.update_site' %}
+{% set deletion_endpoint = 'admin.delete_useful_link_request' %}
 
 {% set endpoints = [
-        ('inventory.site_info', 'Site information')    
-   ] 
-%}
+    ('admin.manage_useful_link', 'Useful Link information')
+] %}
 
 {% if current_user.is_admin() %}
     {% set endpoints = endpoints + [
-            (update_endpoint, 'Update site'),
-            (deletion_endpoint, 'Delete site')
+            ('admin.update_useful_link', 'Update useful link'),
+            (deletion_endpoint, 'Delete useful link')
        ]
     %}
 {% endif %}
@@ -21,7 +18,7 @@
 {% macro navigation(items) %}
     <div class="ui vertical fluid secondary menu">
         {% for route, name in items %}
-            {% set href = url_for(route, site_id=site.id) %}
+            {% set href = url_for(route, useful_link_id=useful_link.id) %}
             <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
                 {{ name }}
             </a>
@@ -29,28 +26,30 @@
     </div>
 {% endmacro %}
 
-{% macro site_info(site) %}
+
+{% macro useful_link_info(ul) %}
     <table class="ui compact definition table">
-        <tr><td>Site ID</td><td>{{ site.siteid }}</td></tr>
-        <tr><td>Name</td><td>{{ site.name }}</td></tr>
-        <tr><td>Address</td><td>{{ site.address }}</td></tr>
-        <tr><td>City</td><td>{{ site.city }}</td></tr>
-        <tr><td>Country</td><td>{{ site.country }}</td></tr>
-        <tr><td>Region</td><td>{{ site.region }}</td></tr>
-        <tr><td>Customer</td><td>{{ site.customer.name }}</td></tr>
+        <tr><td>Name</td><td>{{ ul.name }}</td></tr>
+        <tr><td>URL</td><td>{{ ul.url }}</td></tr>
+        <tr><td>Title</td><td>{{ ul.title }}</td></tr>
+        <tr><td>Short description</td><td>{{ ul.short_descr }}</td></tr>
+        <tr><td>Long Description</td><td>{{ ul.long_descr }}</td></tr>
+        <tr><td>Tooltip</td><td>{{ ul.tooltip }}</td></tr>
+        <tr><td>Enabled</td><td>{{ ul.enabled }}</td></tr>
+        <tr><td>Image</td><td>{{ ul.img }}</td></tr>
     </table>
 {% endmacro %}
 
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
-            <a class="ui basic compact button" href="{{ url_for('inventory.sites') }}">
+            <a class="ui basic compact button" href="{{ url_for('admin.useful_links') }}">
                 <i class="caret left icon"></i>
-                Back to all sites
+                Back to all links
             </a>
             <h2 class="ui header">
-                {{ site.siteid }}
-                <div class="sub header">View and manage {{ site.siteid }}’s site details.</div>
+                {{ useful_link.name }}
+                <div class="sub header">View and manage link {{ useful_link.name }}.</div>
             </h2>
         </div>
         <div class="stretched divided very relaxed row">
@@ -64,8 +63,8 @@
                         <div class="content">
                             This action is permanent
                             <div class="sub header">
-                                Deleting a site is not a reversible change. Any information associated
-                                with this site will be removed, and cannot be recovered.
+                                Deleting a link is not a reversible change. Any information associated
+                                with this link will be removed, and cannot be recovered.
                             </div>
                         </div>
                     </h3>
@@ -78,14 +77,14 @@
                             </div>
                         </div>
                         <a class="ui disabled negative deletion button">
-                            Delete this site
+                            Delete this link
                         </a>
                     </div>
                     </div>
                 {% elif form %}
                     {{ f.render_form(form) }}
                 {% else %}
-                    {{ site_info(site) }}
+                    {{ useful_link_info(useful_link) }}
                 {% endif %}
             </div>
         </div>
@@ -95,7 +94,7 @@
         $('.deletion.checkbox').checkbox({
             onChecked: function() {
                 $('.deletion.button').removeClass('disabled')
-                        .attr('href', '{{ url_for('inventory.delete_site', site_id=site.id) }}');
+                        .attr('href', '{{ url_for('admin.delete_useful_link', useful_link_id=useful_link.id) }}');
             },
             onUnchecked: function() {
                 $('.deletion.button').addClass('disabled').removeAttr('href');

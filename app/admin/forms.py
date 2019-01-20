@@ -5,7 +5,9 @@ from wtforms.fields import (
     PasswordField,
     StringField,
     SubmitField,
-    BooleanField
+    BooleanField,
+    HiddenField,
+    FileField
 )
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import (
@@ -13,6 +15,7 @@ from wtforms.validators import (
     EqualTo,
     InputRequired,
     Length,
+    Regexp
 )
 
 from app import db
@@ -91,3 +94,33 @@ class NewUserForm(InviteUserForm):
     password2 = PasswordField('Confirm password', validators=[InputRequired()])
 
     submit = SubmitField('Create')
+
+
+class JsonFileImportForm(Form):
+    jsonfile = FileField('Upload JSON', [ Regexp("^.*\.json$") ])
+    submit = SubmitField('Import file')
+
+
+class NewUsefulLinkForm(Form):
+    name = StringField(
+        'Name', validators=[InputRequired(),
+                                  Length(1, 100)])
+    url = StringField(
+        'URL', validators=[InputRequired(),
+                                  Length(1, 100)])
+    title = StringField(
+        'Title', validators=[InputRequired(),
+                                  Length(1, 100)])
+    short_descr = StringField(
+        'Short Description', validators=[InputRequired(),
+                                  Length(1, 100)])
+    long_descr = StringField(
+        'Long Description', validators=[])
+    tooltip = StringField(
+        'Tooltip', validators=[])
+    img = StringField('Upload JPG')
+    enabled = BooleanField('Visible', default=True)
+
+    submit = SubmitField('Add link')
+
+

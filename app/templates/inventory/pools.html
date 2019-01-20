@@ -6,7 +6,7 @@
         <div class="sixteen wide tablet twelve wide computer centered column">
 
             {% if current_user.is_admin() %}
-                <div class="ui right floated icon basic compact button with-popup" data-content="Add a new site" onclick="window.open('{{ url_for('inventory.new_site') }}', '_self')">
+                <div class="ui right floated icon basic compact button with-popup" data-content="Add a new pool" onclick="window.open('{{ url_for('inventory.new_pool') }}', '_self')">
                     <i class="olive add icon"></i>
                 </div>
             {% endif %}
@@ -16,32 +16,33 @@
                 Back to inventory dashboard
             </a>
             <h2 class="ui header">
-                Sites
+                Device pools
                 <div class="sub header">
-                    View and manage current network sites.
+                    View and manage network device pools.
                 </div>
             </h2>
 
             <div class="ui menu">
-                <div id="select-region" class="ui dropdown item">
+                <div id="select-pool" class="ui dropdown item">
                     <div class="text">
-                        Select region
+                        Select pool
                     </div>
                     <i class="dropdown icon"></i>
                     <div class="menu">
-                        <div class="item" data-value="">All regions</div>
-                        {% for r in ["EMEA", "NASA", "APAC"] %}
-                            <div class="item" data-value="{{ r }}">{{ r }}</div>
+                        <div class="item" data-value="">Select pool</div>
+                        {% for r in pools %}
+                            <div class="item" data-value="{{ r.name }}">{{ r.name }}</div>
                         {% endfor %}
                     </div>
                 </div>
                 <div class="ui right search item">
                     <div class="ui transparent icon input">
-                        <input id="search-sites" type="text" placeholder="Search inventory...">
+                        <input id="search-pools" type="text" placeholder="Search pools...">
                         <i class="search icon"></i>
                     </div>
                 </div>
             </div>
+
 
             {# Use overflow-x: scroll so that mobile views don't freak out
              # when the table is too wide #}
@@ -49,29 +50,17 @@
                 <table class="ui searchable sortable unstackable selectable celled table">
                     <thead>
                         <tr>
-                            <th class="sorted ascending">Site ID</th>
-                            <th>Name</th>
-                            <th>City</th>
-                            <th>Country</th>
-                            <th>Region</th>
-                            <th>WAN Owner</th>
-                            <th></th>
+                            <th class="sorted ascending">Pool</th>
+                            <th>Description</th>
+                            <th>Devices</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {% for u in sites | sort(attribute='siteid') %}
-                        {% set ise_status = u.ise.present if (u.ise is defined and u.ise.present is defined) else False %}
-                        <tr onclick="window.location.href = '{{ url_for('inventory.site_info', site_id=u.id) }}';">
-                            <td>{{ u.siteid }}</td>
+                    {% for u in pools | sort(attribute='name') %}
+                        <tr onclick="window.location.href = '{{ url_for('inventory.pool_info', pool_id=u.id) }}';">
                             <td>{{ u.name }}</td>
-                            <td>{{ u.city }}</td>
-                            <td>{{ u.country }}</td>
-                            <td class="site region">{{ u.region }}</td>
-                            <td>{{ u.get_option('wan_owner') }}</td>
-                            <td>{{ check_item_icon('ise', ise_status,
-                                    'icon key', description='ISE status') }}
-                                    {{ u.devices|length }}
-                            </td>
+                            <td>{{ u.description }}</td>
+                            <td>{{ u.devices }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -82,7 +71,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#search-sites').keyup(function () {
+            $('#search-pools').keyup(function () {
                 var searchText = $(this).val();
                 if (searchText.length > 0) {
                     $('tbody td:icontains(' + searchText + ')').addClass('positive');
@@ -95,7 +84,7 @@
                 }
             });
 
-            $('#select-region').dropdown({
+            $('#select-pool').dropdown({
                 onChange: function (value, text, $selectedItem) {
                     $('td.site.region:contains(' + value + ')').closest('tr').removeClass('hidden').show();
                     $('td.site.region').not(':contains(' + value + ')').closest('tr').addClass('hidden').hide();
