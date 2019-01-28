@@ -17,12 +17,12 @@ class UsefulLink(BaseModelWithOptions):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)
-    url = db.Column(db.String(), unique=True)
-    title = db.Column(db.String(), unique=True)
-    short_descr = db.Column(db.String(), unique=True)
-    long_descr = db.Column(db.String(), unique=True)
-    tooltip = db.Column(db.String(), unique=True)
-    img = db.Column(db.String(), unique=True) # filename of uploaded image
+    url = db.Column(db.String(), unique=False)
+    title = db.Column(db.String(), unique=False)
+    short_descr = db.Column(db.String(), unique=False)
+    long_descr = db.Column(db.String(), unique=False)
+    tooltip = db.Column(db.String(), unique=False)
+    img = db.Column(db.String(), unique=False) # filename of uploaded image
     enabled = db.Column(db.Boolean, default=True)
 
 

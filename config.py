@@ -35,7 +35,7 @@ class Config:
     # Email
     MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.sendgrid.net'
     MAIL_PORT = os.environ.get('MAIL_PORT') or 587
-    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') or True
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') if os.environ.get('MAIL_USE_TLS') is not None else True
     MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL') or False
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
