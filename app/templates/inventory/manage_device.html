@@ -35,6 +35,8 @@
         <tr><td>Management IP</td><td>{{ device.managementip }}</td></tr>
         <tr><td>Function</td><td>{{ device.function }}</td></tr>
         <tr><td>Site ID</td><td>{{ device.site.siteid }}</td></tr>
+        <tr><td>Options</td><td>{{ device.options|safe }}</td></tr>
+        <tr><td>Facts</td><td>{{ device.facts|safe }}</td></tr>
     </table>
 {% endmacro %}
 

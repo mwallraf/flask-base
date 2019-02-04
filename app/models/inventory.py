@@ -94,6 +94,22 @@ class InventorySite(BaseModelWithOptions):
         "wan_owner": ""
     }))
 
+    # only serialize the keys defined here
+    # required keys will always be returned, even when null or empty
+    # (key, required)
+    serialize_keys = [
+            ("id", True),
+            ("siteid", True),
+            ("name", True),
+            ("address", False),
+            ("city", True),
+            ("country", True),
+            ("region", True),
+            ("enabled", True),
+            ("visible", True),
+            ("customer", True),
+            ("options", True),
+    ]
 
     @classmethod
     def get_options(cls):
@@ -144,7 +160,7 @@ class InventorySite(BaseModelWithOptions):
         })
 
 
-    def serialize_json(self):
+    def __serialize_json(self):
         """Return json representation of a site"""
         return json.dumps({
             "siteid": self.siteid,
@@ -318,7 +334,7 @@ class InventoryDevice(BaseModelWithOptions):
     vendor = db.Column(db.String)
     networks = db.Column(db.String) # comma seperated list of networks
     driver = db.Column(db.String)  # ex napalm driver: cisco_ios, cisco_wlc, hp_procurve, ..
-    function = db.Column(db.String) # override global or pool settings   
+    function = db.Column(db.String) # see INVENTORY_DEVICE_FUNCTIONS in config file
     username = db.Column(db.String) # override global or pool settings
     password = db.Column(db.String) # override global or pool settings
     enable_password = db.Column(db.String) # override global or pool settings
@@ -352,6 +368,35 @@ class InventoryDevice(BaseModelWithOptions):
     facts = db.Column(db.Text, default=json.dumps({
     }))
 
+    # only serialize the keys defined here
+    # required keys will always be returned, even when null or empty
+    # (key, required)
+    serialize_keys = [
+            ("id", True),
+            ("deviceid", True),
+            ("managementip", True),
+            ("hostname", True),
+            ("domain", True),
+            ("enabled", True),
+            ("visible", True),
+            ("active", True),
+            ("alias", True),
+            ("source", False),
+            ("hwmodel", False),
+            ("swversion", False),
+            ("vendor", False),
+            ("networks", False),
+            ("driver", False),
+            ("function", True),
+            ("username", False),
+            ("password", False),
+            ("enable_password", False),
+            ("status", True),
+            ("site", True),
+            ("options", True),
+            ("facts", True),
+    ]
+
 
     @classmethod
     def sample_json(cls):
@@ -381,34 +426,6 @@ class InventoryDevice(BaseModelWithOptions):
         })
 
 
-    def serialize_json(self):
-        """Return json representation of a device"""
-        #a.default_site_id()
-        return json.dumps({
-            "deviceid": self.deviceid,
-            "managementip": self.managementip,
-            "hostname": self.hostname,
-            "domain": self.domain,
-            "enabled": self.enabled,
-            "visible": self.visible,
-            "active": self.active,
-            "alias": self.alias,
-            "source": self.source,
-            "hwmodel": self.hwmodel,
-            "swversion": self.swversion,
-            "vendor": self.vendor,
-            "networks": self.networks,
-            "driver": self.driver,
-            "function": self.function,
-            "username": self.username,
-            "password": self.password,
-            "enable_password": self.enable_password,
-            "status": self.status,
-            "siteid": self.site.siteid if self.site else None,
-            "options": json.loads(self.options) if self.options else json.dumps({}),
-            "facts": json.loads(self.facts) if self.facts else json.dumps({})
-        })
-
 
     def load_from_dict(self, d):
         """Store all parameters found in a dict
@@ -435,16 +452,19 @@ class InventoryDevice(BaseModelWithOptions):
             current_app.logger.debug("import key, value: {}, {}".format(x, d[x]))
             stats["total"] += 1
 
-            if x in [ "site", "options", "facts" ]:
-                if x == "site":
+            # for none-standard sring values we need a seperate action
+            if x in [ "site", "siteid", "options", "facts" ]:
+                if x in [ "site", "siteid" ]:
                     self.site = InventorySite.query.filter_by(siteid=d[x]).first()
                     if not self.site:
                         self.site = InventorySite().default_site()
                     stats["imported_keys"].append(x)
+                elif x in [ "facts", "options" ]:
+                    dict_a = json.loads(getattr(self, x))
+                    dict_a.update(d[x])
+                    setattr(self, x, str(json.dumps(dict_a)))
                 else:
                     stats["ignored_keys"].append(x)
-                # TODO:
-                #  import options and facts
                 continue
 
             current_value = None
@@ -490,7 +510,7 @@ class InventoryDevice(BaseModelWithOptions):
         Returns the individual options that can be used in the options field
         In order that should be displayed in HTML
         """
-        return Config.KNOWN_FACTS
+        return [ x[0] for x in Config.INVENTORY_ENABLED_FACTS ]
 
 
     def __repr__(self):

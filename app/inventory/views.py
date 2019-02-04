@@ -57,6 +57,22 @@ def devices():
     )
 
 
+## AJAX calls client
+
+@inventory.route('/devices/all', methods=['GET'])
+@login_required
+def get_all_device_records():
+    """
+      Returns a json format of all tacacs clients
+      This function should be used by AJAX call for populating the datatable
+    """
+    data = [ x.serialize_json(jsonformat=False, allownull=False, showid=True) for x in InventoryDevice.query.all() ]
+    #print("get_all_client_records data = {}".format(data))
+    return jsonify({ "data": data } )
+
+
+
+
 @inventory.route('/new-device', methods=['GET', 'POST'])
 @login_required
 @admin_required

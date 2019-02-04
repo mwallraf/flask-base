@@ -1,5 +1,6 @@
 from .. import db
 import json
+from config import Config
 
 
 class BaseModelWithOptions(db.Model):
@@ -102,6 +103,59 @@ class BaseModelWithOptions(db.Model):
             pass
 
         return k
+
+
+    def serialize_json(self, jsonformat=True, allownull=True, showid=False):
+        """
+        Returns a serialized format of a record.
+        jsonformat: if True then return json text otherwise return dict
+        allownull: if True then return everything, otherwise only keys with values
+        showid: if True then the id field will be included, otherwise skipped
+        """
+        o = {}
+        for key, required in self.serialize_keys:
+
+            # only id field if required
+            if key == "id" and not showid:
+                continue
+
+            v = getattr(self, key)
+            t = str(type(v))
+            #print("key, type = {}, {}".format(key, t))
+
+            # if we don't want empty values then don't store the key
+            if not allownull and not v and not required:
+                continue
+
+            # if the key is a reference to another model then either return a single value
+            # or the entire serialized model (depending on the key)
+            if 'app.models.inventory' in t and key == "site":
+                if jsonformat:
+                    o["siteid"] = self.site.siteid if self.site else ""
+                else:
+                    o["site"] = self.site.serialize_json(jsonformat, allownull, showid)
+                continue
+            if 'app.models.inventory' in t and key == "customer":
+                o["customer"] = self.customer.name if self.customer else ""
+                continue
+
+            # options and facts are json representations in the DB we have to convert it 
+            if key in ["options", "facts"]:
+                o[key] = json.loads(v) if v else {}
+
+                # for the facts, check INVENTORY_ENABLED_FACTS and make sure for these
+                # a key ["fact"]["validated"] exists
+                if key == "facts":
+                    for enabled_fact, fact_icon in Config.INVENTORY_ENABLED_FACTS:
+                        o[key].setdefault(enabled_fact, {})
+                        o[key][enabled_fact].setdefault("validated", False)
+            else:
+                o[key] = v
+
+        if jsonformat:
+            return json.dumps(o)
+        else:
+            return o
 
 
 

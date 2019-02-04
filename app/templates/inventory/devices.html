@@ -1,9 +1,17 @@
 {% extends 'layouts/base.html' %}
 {% from "inventory/macros.html" import check_item_icon, tools_icon %}
 
+{% block custom_head_tags %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css">    
+
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>    
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js"></script>    
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>   
+{% endblock %}
+
 {% block content %}
     <div class="ui stackable grid container">
-        <div class="sixteen wide tablet twelve wide computer centered column">
+        <div class="sixteen wide tablet fourteen wide computer centered column">
 
             {% if current_user.is_admin() %}
                 <div class="ui right floated icon basic compact button with-popup" data-content="Add a new device" onclick="window.open('{{ url_for('inventory.new_device') }}', '_self')">
@@ -22,31 +30,31 @@
                 </div>
             </h2>
 
-            <div class="ui menu">
-                <div id="select-role" class="ui dropdown item">
-                    <div class="text">
-                        Select device type
-                    </div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" data-value="all_no_ap">All managed devices</div>
-                        <div class="item" data-value="all">All devices (incl AP)</div>
-                        {% for r in ["EMEA", "NASA", "APAC"] %}
-                            <div class="item" data-value="{{ r }}">{{ r }}</div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="ui right search item">
-                    <div class="ui transparent icon input">
-                        <input id="search-users" type="text" placeholder="Search inventory...">
-                        <i class="search icon"></i>
-                    </div>
-                </div>
-            </div>
 
             {# Use overflow-x: scroll so that mobile views don't freak out
-             # when the table is too wide #}
+             # when the table is too wide 
             <div style="overflow-x: scroll;">
+                #}
+
+
+
+              <table id="table" class="ui unstackable selectable celled table compact" cellspacing="0" width="100%">
+                <thead>
+                  <tr>
+                    <th>Hostname</th>
+                    <th>Management IP</th>
+                    <th>Function</th>
+                    <th>Site ID</th>
+                    <th>Region</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+
+{#
+
+
                 <table class="ui searchable sortable unstackable selectable celled table">
                     <thead>
                         <tr>
@@ -82,40 +90,122 @@
                     {% endfor %}
                     </tbody>
                 </table>
+
             </div>
+
+#}
+
         </div>
     </div>
 
     <script type="text/javascript">
+
+
+        function openDeviceInfo(id)  {
+            window.location.href='device/'+id;
+        }
+
+        function openDeviceTools(id)  {
+            window.location.href='device/tools/'+id;
+        }
+
+        function openDeviceDelete(id)  {
+            window.location.href='device/'+id+'/delete';
+        }
+
+
+
         $(document).ready(function () {
-            $('#search-users').keyup(function () {
-                var searchText = $(this).val();
-                if (searchText.length > 0) {
-                    $('tbody td:icontains(' + searchText + ')').addClass('positive');
-                    $('td.positive').not(':icontains(' + searchText + ')').removeClass('positive');
-                    $('tbody td').not(':icontains(' + searchText + ')').closest('tr').addClass('hidden').hide();
-                    $('tr.hidden:icontains(' + searchText + ')').removeClass('hidden').show();
-                } else {
-                    $('td.positive').removeClass('positive');
-                    $('tr.hidden').removeClass('hidden').show();
+  
+            // Setup - add a text input to each header cell of the datatable
+            $('#table thead th').each(function() {
+                var title = $('#table thead th').eq($(this).index()).text();
+                if (title) {
+                    $(this).html('<div class="ui fluid mini input"><input type="text" placeholder="' + title + '"></div>');
                 }
             });
 
-            $('#select-role').dropdown({
-                onChange: function (value, text, $selectedItem) {
-                    if (value === "all") {
-                        value = "";
-                    }
-                    else if (value === "all_no_ap") {
-                        value = "ap";
-                        $('td.device.type:contains(' + value + ')').closest('tr').addClass('hidden').hide();
-                        $('td.device.type').not(':contains(' + value + ')').closest('tr').removeClass('hidden').show();
-                        return;
-                    }
-                    $('td.device.type:contains(' + value + ')').closest('tr').removeClass('hidden').show();
-                    $('td.device.type').not(':contains(' + value + ')').closest('tr').addClass('hidden').hide();
-                }
+
+            var mytable = $('#table').DataTable( {
+                    ajax: "/inventory/devices/all",
+                    "deferRender": true,
+                    "lengthMenu": [ [50, 100, 250, -1], [50, 100, 250, "All"] ],
+                    // server side
+                    //serverSide: true,
+                    //processing: true,
+                    //"rowId": "id",
+                    "rowId": "id",
+                    "columns": [
+                        { "data": "hostname" },
+                        { "data": "managementip" },
+                        { "data": "function" },
+                        { "data": "site.siteid" },
+                        { "data": "site.region" },
+                        {
+                            "data": null,
+                            "render": function (data, type, row, meta) {
+                                btngrp = '';
+
+                                {# generate a button for each fact #}
+                                {% for fact in config.INVENTORY_ENABLED_FACTS %}                                    
+                                    //btngrp  = '<div class="ui compact icon buttons">';
+                                    var fact_icon = "{{ fact[1] }}";
+                                    var fact_help = "{{ fact[2] }}";
+                                    if (row.facts.{{fact[0]}}.validated) {
+                                        var backup_color = "green";
+                                    }
+                                    else {
+                                        var backup_color = "orange";
+                                    }
+                                    btngrp += '<button class="ui circular mini icon '+backup_color+' button" title="'+fact_help+'"><i class="'+fact_icon+' icon"></i></button>';
+                                {% endfor %}
+
+                                //btngrp += '</div>';
+                                {% if current_user.is_admin() %}
+                                    //btngrp += '<div class="ui compact icon buttons">';
+                                    btngrp += '<button class="ui mini icon button" onclick="openDeviceInfo('+ row.id +')"><i class="info icon"></i></button>';
+                                    btngrp += '<button class="ui mini icon button" onclick="openDeviceInfo('+ row.id +')"><i class="delete red icon"></i></button>';
+                                    //btngrp += '</div>';
+                                {% endif %}
+
+                                return btngrp;
+                                //return '<div class="ui mini basic icon buttons"><button class="ui button"><i class="file icon"></i></button><button class="ui button"><i class="save icon"></i></button><button class="ui button"><i class="upload icon"></i></button><button class="ui button"><i class="download icon"></i></button></div>';
+
+                                //return '<button type="button" class="btn btn-danger btn-xs" onclick="deleteElement('+ row.hostname +')">Delete</button>';
+                            }
+                        }
+                    ]
+                  }
+              );
+
+
+
+            // Apply column search to the datatable
+            mytable.columns().eq(0).each(function(colIdx) {
+                $('input', mytable.column(colIdx).header()).on('keyup change', function() {
+                    mytable.column(colIdx).search(this.value).draw();
+                });
+
+                $('input', mytable.column(colIdx).header()).on('click', function(e) {
+                    e.stopPropagation();
+                });
             });
+
+
+            $('#table tbody').on( 'click', 'td', function () {
+                var cell = mytable.cell(this);
+                idx = cell.index();
+
+                // click on the hostname
+                if (idx.column === 0) {
+                    //var row = $(this).closest('tr');
+                    var row = mytable.row( idx.row );
+                    openDeviceTools(row.id())
+                }
+            } );
+
+
         });
+
     </script>
 {% endblock %}

@@ -32,6 +32,26 @@ class Config:
         print('SECRET KEY ENV VAR NOT SET! SHOULD NOT SEE IN PRODUCTION')
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 
+    # Application specific options
+    REGIONS = ["EMEA", "NASA", "APAC"]
+
+    ### inventory parameters
+    # short_description, long_description
+    INVENTORY_DEVICE_FUNCTIONS = [
+                    ('switch_access', 'Access Switch'), 
+                    ('switch_core', 'Core Switch'), 
+                    ('wlan_wlc', 'Wireless LAN Controller'), 
+                    ('wlan_ap', 'Wireless Access Point'), 
+                    ('voice_gateway', 'Voice Gateway'),
+                    ('router', 'Router'),
+                    ('other', 'Other'),
+                ]
+    # fact, icon
+    INVENTORY_ENABLED_FACTS = [
+        ('backup', 'file'),
+        ('ise', 'key'),
+    ]
+
     # Email
     MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.sendgrid.net'
     MAIL_PORT = os.environ.get('MAIL_PORT') or 587
@@ -69,10 +89,6 @@ class Config:
     RQ_DEFAULT_PORT = url.port
     RQ_DEFAULT_PASSWORD = url.password
     RQ_DEFAULT_DB = 0
-
-    # Application specific options
-    KNOWN_FACTS = [ ]
-    REGIONS = ["EMEA", "NASA", "APAC"]
 
     @staticmethod
     def init_app(app):

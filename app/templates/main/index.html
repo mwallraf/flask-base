@@ -29,11 +29,9 @@
             </h2>
 
             <div class="ui special four cards mini">
-                {{ dashboard_link("http://www.google.be", "Splunk", "Reports and dashboarding", "images/links/splunk.png", "Admin account = admin/Epiroc01") }}
-                {{ dashboard_link("http://www.google.be", "GIT", "GIT code repository", "images/links/git.png") }}
-                {{ dashboard_link("http://www.google.be", "Backups", "Direct link to backups", "images/links/backups.png") }}
-                {{ dashboard_link("http://www.google.be", "Solarwinds", "Monitoring", "images/links/git.png") }}
-                {{ dashboard_link("", "", "", "images/links/git.png") }}
+                {% if not useful_links %}
+                {{ dashboard_link("http://www.google.be", "Google", "Example link", "images/links/git.png", "Manage links from the admin dashboard") }}
+                {% endif %}
                 {% for ul in useful_links %}
                   {{ dashboard_link(ul.url, ul.title, ul.short_descr, ul.img, ul.tooltip ) }}
                 {% endfor %}

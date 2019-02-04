@@ -48,6 +48,25 @@ class ProvisioningKeyword(BaseModelWithOptions):
         "validators": ""
     }))
 
+    # only serialize the keys defined here
+    # required keys will always be returned, even when null or empty
+    # (key, required)
+    serialize_keys = [
+            ("id", True),
+            ("keyword", True),
+            ("type", False),
+            ("value", False),
+            ("default_value", False),
+            ("description", True),
+            ("regex", False),
+            ("required", False),
+            ("widget", False),
+            ("enabled", False),
+            ("visible", False),
+            ("order", False),
+            ("options", False),
+    ]
+
     def next_order(self):
         """
         Returns the next order index
@@ -83,22 +102,22 @@ class ProvisioningKeyword(BaseModelWithOptions):
             "options": { o:"<{}>".format(o) for o in cls.get_options() }
         })
 
-    def serialize_json(self):
-        """Return json representation of a keyword"""
-        return json.dumps({
-            "keyword": self.keyword,
-            "type": self.type,
-            "value": self.value,
-            "default_value": self.default_value,
-            "description": self.description,
-            "regex": self.regex,
-            "required": self.required,
-            "widget": self.widget,
-            "enabled": self.enabled,
-            "visible": self.visible,
-            "order": self.order,
-            "options": json.loads(self.options) if self.options else json.dumps({})
-        })
+    #def serialize_json(self):
+    #    """Return json representation of a keyword"""
+    #    return json.dumps({
+    #        "keyword": self.keyword,
+    #        "type": self.type,
+    #        "value": self.value,
+    #        "default_value": self.default_value,
+    #        "description": self.description,
+    #        "regex": self.regex,
+    #        "required": self.required,
+    #        "widget": self.widget,
+    #        "enabled": self.enabled,
+    #        "visible": self.visible,
+    #        "order": self.order,
+    #        "options": json.loads(self.options) if self.options else json.dumps({})
+    #    })
 
 
     def load_from_dict(self, d):

@@ -43,13 +43,7 @@ def NewDeviceForm(*args, **kwargs):
                 'Device function',
                 validators=[InputRequired()],
                 default="access_switch",
-                choices=[
-                    ('switch_access', 'Access Switch'), 
-                    ('switch_core', 'Core Switch'), 
-                    ('wlan_wlc', 'Wireless LAN Controller'), 
-                    ('wlan_ap', 'Access Point'), 
-                    ('voice_gateway', 'Voice Gateway')
-                ]
+                choices=Config.INVENTORY_DEVICE_FUNCTIONS
             )
 
         site_id = QuerySelectField(
